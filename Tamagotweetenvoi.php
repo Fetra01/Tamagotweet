@@ -2,7 +2,7 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <link  href="/css/master.css">
+    <link type="text/css" rel="stylesheet" href="tama.css">
     <title>TAMAGOTWEET</title>
   </head>
   <header>
@@ -13,22 +13,29 @@
           <textarea type="text" name="tweet" value="Ecrir le tweet"></textarea>
           <input type="submit" name="compteur" value="Publier le tweets" >
         </form>
-        <div class="container">
-          <p>ici il y aura l'image</p>
+        <div   class="container">
+          <img id="sky" src="tama.gif" alt="">
         </div>
 
         <div class="hero">
-          <p>ici s'affichera le vomis</p>
+          <p></p>
         </div>
         <?php
 
             if(!empty($_POST['compteur'])) {
                 $monfichier = fopen("/var/www/html/MesProjetsPHP/MesExos/SauvegardeTamago.txt", 'r+');
                 $nbTweet = fgets($monfichier); // On lit la première ligne (nombre de pages vues)
+                if ($nbTweet!=5){
                 $nbTweet += 1; // On augmente de 1 ce nombre de pages vues
                 fseek($monfichier, 0); // On remet le curseur au début du fichier
                 fputs($monfichier, $nbTweet); // On écrit le nouveau nombre de pages vues
                 fclose($monfichier);
+              }else{
+                $nbTweet=0; // On augmente de 1 ce nombre de pages vues
+                fseek($monfichier, 0); // On remet le curseur au début du fichier
+                fputs($monfichier, $nbTweet); // On écrit le nouveau nombre de pages vues
+                fclose($monfichier);
+              }
             }
 
             $text=$_POST["tweet"];
@@ -51,5 +58,44 @@
                          ->performRequest();
 
         ?>
+        <script>
+        var nbTweet = <?php echo json_encode($nbTweet); ?>;
+        console.log (nbTweet);
+        var myImg = document.getElementById("sky");
+        var currHeight = myImg.clientHeight;
+        var currWidth = myImg.clientWidth;
+        var debHeight = 150;
+        var debWidth = 100;
+            myImg.style.height= (debHeight) + "px"
+            myImg.style.width= (debWidth) + "px"
+            myImg.style.display="flex";
+            myImg.style.justifyContent="center";
+            myImg.style.width= "40px";
+            myImg.style.height= "45px" ;
+        		if(nbTweet==5){
+                    reinit();
+        		} else {
+                    myImg.style.height = (currHeight + 50) + "px";
+                    myImg.style.width = (currWidth + 50) + "px";
+        		}
+
+
+          function reinit(){
+
+              var currHeight = myImg.clientHeight;
+              var currWidth = myImg.clientWidth;
+              var debHeight = 150;
+              var debWidth = 100;
+                  myImg.style.height= (debHeight) + "px"
+                  myImg.style.width= (debWidth) + "px"
+                  myImg.style.display="flex";
+                  myImg.style.justifyContent="center";
+                  myImg.style.width= "40px";
+                  myImg.style.height= "45px" ;
+
+
+          }
+
+      </script>
   </body>
 </html>
